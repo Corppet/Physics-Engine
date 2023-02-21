@@ -7,10 +7,12 @@ public class BallController : MonoBehaviour
 {
     [HideInInspector] public static BallController instance { private set; get; }
 
-    [Range(0f, 100f)]
-    [SerializeField] private float rollingSpeed = 10f;
+    [Range(0f, 360f)]
+    [SerializeField] private float angularAcceleration = 10f;
+    [Range(0f, 3600f)]
+    [SerializeField] private float maxAngularVelocity = 720f;
 
-    private Rigidbody2D myRigidbody;
+    private Rigidbody2D body;
 
     private void Awake()
     {
@@ -23,12 +25,31 @@ public class BallController : MonoBehaviour
             Destroy(gameObject);
         }
 
-        myRigidbody = GetComponent<Rigidbody2D>();
+        body = GetComponent<Rigidbody2D>();
     }
 
     private void FixedUpdate()
     {
         // roll the ball
-        myRigidbody.AddTorque(-rollingSpeed);
+        body.AddTorque(-angularAcceleration * body.inertia);
+        
+        // clamp the ball's rolling speed
+        if (body.angularVelocity > maxAngularVelocity)
+        {
+            body.angularVelocity = maxAngularVelocity;
+        }
+        else if (body.angularVelocity < -maxAngularVelocity)
+        {
+            body.angularVelocity = -maxAngularVelocity;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // if the ball hits the ground or an obstacle, game over
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Obstacle"))
+        {
+            GameManager.instance.GameOver();
+        }
     }
 }

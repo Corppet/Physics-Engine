@@ -47,7 +47,7 @@ public class CursorController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Collider2D targetObject = Physics2D.OverlapPoint(cursorPosition);
-            if (targetObject)
+            if (targetObject && targetObject.CompareTag("Interactable"))
             {
                 selectedRB = targetObject.GetComponent<Rigidbody2D>();
                 selectedRB.constraints = RigidbodyConstraints2D.FreezeRotation;
