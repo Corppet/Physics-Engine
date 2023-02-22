@@ -8,6 +8,8 @@ TagManager:
   - Uninteractable
   - Ground
   - Obstacle
+  - Platform
+  - Goal
   layers:
   - Default
   - TransparentFX
@@ -19,7 +21,7 @@ TagManager:
   - Interactables
   - Uninteractables
   - Player
-  - 
+  - Goal
   - 
   - 
   - 

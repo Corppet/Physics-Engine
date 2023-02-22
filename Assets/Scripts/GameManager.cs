@@ -2,12 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     [HideInInspector] public static GameManager instance { private set; get; }
 
-    [SerializeField] private CanvasGroup gameOverGroup;
+    [HideInInspector] public bool isInPlay;
+
+    [Header("Keybinds")]
+    [SerializeField] private KeyCode menuKey = KeyCode.Escape;
+    [SerializeField] private KeyCode restartKey = KeyCode.R;
+
+    [Space(10)]
+
+    [Header("References")]
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private TMP_Text gameOverText;
 
     public void ReturnToMenu()
     {
@@ -21,7 +32,16 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        gameOverGroup.enabled = true;
+        gameOverText.text = "Game Over";
+        gameOverPanel.SetActive(true);
+        isInPlay = false;
+    }
+
+    public void LevelComplete()
+    {
+        gameOverText.text = "Level Complete";
+        gameOverPanel.SetActive(true);
+        isInPlay = false;
     }
 
     private void Awake()
@@ -38,6 +58,20 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        gameOverGroup.enabled = false;
+        gameOverPanel.SetActive(false);
+
+        isInPlay = true;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(menuKey))
+        {
+            ReturnToMenu();
+        }
+        else if (Input.GetKeyDown(restartKey))
+        {
+            Restart();
+        }
     }
 }

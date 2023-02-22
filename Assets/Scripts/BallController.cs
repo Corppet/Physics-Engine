@@ -11,6 +11,8 @@ public class BallController : MonoBehaviour
     [SerializeField] private float angularAcceleration = 10f;
     [Range(0f, 3600f)]
     [SerializeField] private float maxAngularVelocity = 720f;
+    [Range(0f, 100f)]
+    [SerializeField] private float maxSpeed = 10f;
 
     private Rigidbody2D body;
 
@@ -30,6 +32,9 @@ public class BallController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!GameManager.instance.isInPlay)
+            return;
+
         // roll the ball
         body.AddTorque(-angularAcceleration * body.inertia);
         
@@ -41,6 +46,16 @@ public class BallController : MonoBehaviour
         else if (body.angularVelocity < -maxAngularVelocity)
         {
             body.angularVelocity = -maxAngularVelocity;
+        }
+
+        // clamp the ball's speed
+        if (body.velocity.magnitude > maxSpeed)
+        {
+            body.velocity = body.velocity.normalized * maxSpeed;
+        }
+        else if (body.velocity.magnitude < -maxSpeed)
+        {
+            body.velocity = body.velocity.normalized * -maxSpeed;
         }
     }
 

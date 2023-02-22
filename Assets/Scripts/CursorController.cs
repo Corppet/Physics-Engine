@@ -8,7 +8,6 @@ public class CursorController : MonoBehaviour
     [HideInInspector] public static CursorController Instance { get; private set; }
 
     [HideInInspector] public Rigidbody2D selectedRB;
-    [HideInInspector] public bool isInPlay;
 
     [Range(0f, 100f)]
     [SerializeField] private float maxForce = 10f;
@@ -33,12 +32,11 @@ public class CursorController : MonoBehaviour
         }
 
         selectedRB = null;
-        isInPlay = true;
     }
 
     private void Update()
     {
-        if (!isInPlay)
+        if (!GameManager.instance.isInPlay)
             return;
 
         cursorPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -69,9 +67,7 @@ public class CursorController : MonoBehaviour
             {
                 selectedRB.velocity = Vector2.zero;
                 selectedRB.AddForce(cursorForce, ForceMode2D.Impulse);
-                
-                // restrict movement
-                selectedRB.constraints |= RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezePositionX;
+                selectedRB.constraints |= RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
                 selectedRB = null;
             }
         }
