@@ -9,13 +9,13 @@ public class CursorController : MonoBehaviour
 
     [HideInInspector] public Interactable selectedPlatform;
     [HideInInspector] public Vector3 offset { get; private set; }
+    [HideInInspector] public Vector3 cursorPosition { get; private set; }
 
     [Range(0f, 100f)]
     public float maxForce = 10f;
     [Range(0f, 100f)]
     public float maxSpeed = 10f;
 
-    private Vector3 cursorPosition;
     private Vector2 cursorForce;
     private Vector3 lastPosition;
 
@@ -35,7 +35,7 @@ public class CursorController : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.instance.isInPlay)
+        if (!GameManager.Instance.isInPlay)
             return;
 
         cursorPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);

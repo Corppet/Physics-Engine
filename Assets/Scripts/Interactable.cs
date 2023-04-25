@@ -40,7 +40,7 @@ public class Interactable : MonoBehaviour
 
     public virtual void MoveToCursor(CursorController cursor, float deltaTime)
     {
-        rigidbody.MovePosition(Vector2.MoveTowards(transform.position, cursor.transform.position + cursor.offset,
+        rigidbody.MovePosition(Vector2.MoveTowards(transform.position, cursor.cursorPosition + cursor.offset,
             cursor.maxSpeed * deltaTime));
     }
 

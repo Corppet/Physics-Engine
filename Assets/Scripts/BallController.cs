@@ -32,7 +32,7 @@ public class BallController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!GameManager.instance.isInPlay)
+        if (!GameManager.Instance.isInPlay)
             return;
 
         // roll the ball
@@ -64,7 +64,7 @@ public class BallController : MonoBehaviour
         // if the ball hits the ground or an obstacle, game over
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Obstacle"))
         {
-            GameManager.instance.GameOver();
+            GameManager.Instance.GameOver();
         }
     }
 }

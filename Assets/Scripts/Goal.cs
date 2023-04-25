@@ -6,9 +6,9 @@ public class Goal : MonoBehaviour
 {
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") && GameManager.instance.isInPlay)
+        if (collision.gameObject.CompareTag("Player") && GameManager.Instance.isInPlay)
         {
-            GameManager.instance.LevelComplete();
+            GameManager.Instance.LevelComplete();
         }
     }
 }

@@ -6,7 +6,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    [HideInInspector] public static GameManager instance { private set; get; }
+    [HideInInspector] public static GameManager Instance { private set; get; }
 
     [HideInInspector] public bool isInPlay;
 
@@ -46,9 +46,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
         else
         {
