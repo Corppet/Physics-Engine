@@ -5,20 +5,19 @@ using UnityEngine;
 
 public class CursorController : MonoBehaviour
 {
-    [HideInInspector] public static CursorController Instance { get; private set; }
+    public static CursorController Instance { get; private set; }
 
-    [HideInInspector] public Rigidbody2D selectedRB;
+    [HideInInspector] public Interactable selectedPlatform;
+    [HideInInspector] public Vector3 offset { get; private set; }
 
     [Range(0f, 100f)]
-    [SerializeField] private float maxForce = 10f;
+    public float maxForce = 10f;
     [Range(0f, 100f)]
-    [SerializeField] private float maxSpeed = 10f;
+    public float maxSpeed = 10f;
 
     private Vector3 cursorPosition;
     private Vector2 cursorForce;
     private Vector3 lastPosition;
-    private float originalRotation;
-    private Vector3 offset;
 
     private void Awake()
     {
@@ -31,7 +30,7 @@ public class CursorController : MonoBehaviour
             Destroy(gameObject);
         }
 
-        selectedRB = null;
+        selectedPlatform = null;
     }
 
     private void Update()
@@ -47,37 +46,30 @@ public class CursorController : MonoBehaviour
             Collider2D targetObject = Physics2D.OverlapPoint(cursorPosition);
             if (targetObject && targetObject.CompareTag("Interactable"))
             {
-                selectedRB = targetObject.GetComponent<Rigidbody2D>();
-                selectedRB.constraints = RigidbodyConstraints2D.FreezeRotation;
-                originalRotation = selectedRB.rotation;
-                offset = selectedRB.transform.position - cursorPosition;
+                targetObject.GetComponent<Interactable>().Select(this); 
+                offset = selectedPlatform.transform.position - cursorPosition;
             }
         }
         // move the selected object with the cursor
-        else if (selectedRB)
+        else if (selectedPlatform)
         {
             cursorForce = (cursorPosition - lastPosition) / Time.deltaTime;
             cursorForce = Vector2.ClampMagnitude(cursorForce, maxForce);
             lastPosition = cursorPosition;
-
-            //selectedRigidbody.rotation = originalRotation - cursorForce.x * 2f;
-
+    
             // release the selected object
             if (Input.GetMouseButtonUp(0))
             {
-                selectedRB.velocity = Vector2.zero;
-                selectedRB.AddForce(cursorForce, ForceMode2D.Impulse);
-                selectedRB.constraints |= RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
-                selectedRB = null;
+                selectedPlatform.Deselect(this);
             }
         }
     }
 
     private void FixedUpdate()
     {
-        if (selectedRB)
+        if (selectedPlatform)
         {
-            selectedRB.MovePosition(Vector2.MoveTowards(selectedRB.position, cursorPosition + offset, maxSpeed * Time.fixedDeltaTime));
+            selectedPlatform.MoveToCursor(this, Time.fixedDeltaTime);
         }
     }
 }

@@ -5,56 +5,82 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Interactable : MonoBehaviour
 {
-    [Header("Camera Bounds")]
-    [Range(-1f, 1f)]
-    [SerializeField] private float leftBoundScale = -1f;
-    [Range(-1f, 1f)]
-    [SerializeField] private float rightBoundScale = 1f;
-    [Range(-1f, 1f)]
-    [SerializeField] private float topBoundScale = 1f;
-    [Range(-1f, 1f)]
-    [SerializeField] private float bottomBoundScale = -1f;
+    #region Camera Bounds
 
-    private float leftBound;
-    private float rightBound;
-    private float topBound;
-    private float bottomBound;
+    //[Header("Camera Bounds")]
+    //[Range(-1f, 1f)]
+    //[SerializeField] protected float leftBoundScale = -1f;
+    //[Range(-1f, 1f)]
+    //[SerializeField] protected float rightBoundScale = 1f;
+    //[Range(-1f, 1f)]
+    //[SerializeField] protected float topBoundScale = 1f;
+    //[Range(-1f, 1f)]
+    //[SerializeField] protected float bottomBoundScale = -1f;
 
-    private Rigidbody2D myRB;
+    //protected float leftBound;
+    //protected float rightBound;
+    //protected float topBound;
+    //protected float bottomBound;
 
-    private void Awake()
+    #endregion
+
+    new protected Rigidbody2D rigidbody;
+
+    public virtual void Select(CursorController cursor)
     {
-        myRB = GetComponent<Rigidbody2D>();
+        cursor.selectedPlatform = this;
+        rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
-    private void Update()
+    public virtual void Deselect(CursorController cursor)
     {
-        Camera camera = Camera.main;
-        float width = camera.orthographicSize * camera.aspect;
-        float height = camera.orthographicSize;
+        cursor.selectedPlatform = null;
+        rigidbody.constraints |= RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+    }
 
-        leftBound = camera.ViewportToWorldPoint(new Vector3(leftBoundScale * width, 0f, 0f)).x;
-        rightBound = camera.ViewportToWorldPoint(new Vector3(rightBoundScale * width, 0f, 0f)).x;
-        topBound = camera.ViewportToWorldPoint(new Vector3(0f, topBoundScale * height, 0f)).y;
-        bottomBound = camera.ViewportToWorldPoint(new Vector3(0f, bottomBoundScale * height, 0f)).y;
+    public virtual void MoveToCursor(CursorController cursor, float deltaTime)
+    {
+        rigidbody.MovePosition(Vector2.MoveTowards(transform.position, cursor.transform.position + cursor.offset,
+            cursor.maxSpeed * deltaTime));
+    }
 
-        // move the object if out of bounds
-        if (transform.position.x < leftBound)
-        {
-            myRB.MovePosition(new Vector2(leftBound, transform.position.y));
-        }
-        else if (transform.position.x > rightBound)
-        {
-            myRB.MovePosition(new Vector2(rightBound, transform.position.y));
-        }
+    protected void Awake()
+    {
+        rigidbody = GetComponent<Rigidbody2D>();
+    }
+
+    protected void Update()
+    {
+        #region Camera Bounds
+
+        //Camera camera = Camera.main;
+        //float width = camera.orthographicSize * camera.aspect;
+        //float height = camera.orthographicSize;
+
+        //leftBound = camera.ViewportToWorldPoint(new Vector3(leftBoundScale * width, 0f, 0f)).x;
+        //rightBound = camera.ViewportToWorldPoint(new Vector3(rightBoundScale * width, 0f, 0f)).x;
+        //topBound = camera.ViewportToWorldPoint(new Vector3(0f, topBoundScale * height, 0f)).y;
+        //bottomBound = camera.ViewportToWorldPoint(new Vector3(0f, bottomBoundScale * height, 0f)).y;
+
+        //// move the object if out of bounds
+        //if (transform.position.x < leftBound)
+        //{
+        //    rigidbody.MovePosition(new Vector2(leftBound, transform.position.y));
+        //}
+        //else if (transform.position.x > rightBound)
+        //{
+        //    rigidbody.MovePosition(new Vector2(rightBound, transform.position.y));
+        //}
         
-        if (transform.position.y < bottomBound)
-        {
-            myRB.MovePosition(new Vector2(transform.position.x, bottomBound));
-        }
-        else if (transform.position.y > topBound)
-        {
-            myRB.MovePosition(new Vector2(transform.position.x, topBound));
-        }
+        //if (transform.position.y < bottomBound)
+        //{
+        //    rigidbody.MovePosition(new Vector2(transform.position.x, bottomBound));
+        //}
+        //else if (transform.position.y > topBound)
+        //{
+        //    rigidbody.MovePosition(new Vector2(transform.position.x, topBound));
+        //}
+
+        #endregion
     }
 }
