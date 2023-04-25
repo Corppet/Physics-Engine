@@ -6,7 +6,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    [HideInInspector] public static GameManager Instance { private set; get; }
+    public static GameManager Instance { private set; get; }
 
     [HideInInspector] public bool isInPlay;
 
@@ -19,6 +19,19 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TMP_Text gameOverText;
+    [SerializeField] private Transform gravityArrowTransform;
+
+    private float gravityRotationOffset;
+
+    public void SetGravity(Vector2 gravity)
+    {
+        // change direction of gravity arrow
+        float angle = Mathf.Atan2(gravity.y, gravity.x) * Mathf.Rad2Deg;
+        gravityArrowTransform.eulerAngles = (angle + gravityRotationOffset + 90f) * Vector3.forward;
+
+        // change direction of gravity
+        Physics2D.gravity = gravity;
+    }
 
     public void ReturnToMenu()
     {
@@ -54,6 +67,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        gravityRotationOffset = gravityArrowTransform.eulerAngles.z;
     }
 
     private void Start()

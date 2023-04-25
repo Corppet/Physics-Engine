@@ -5,29 +5,29 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(CircleCollider2D))]
 public class BallController : MonoBehaviour
 {
-    [HideInInspector] public static BallController instance { private set; get; }
+    public static BallController Instance { private set; get; }
 
     [Range(0f, 360f)]
-    [SerializeField] private float angularAcceleration = 10f;
+    public float angularAcceleration = 10f;
     [Range(0f, 3600f)]
-    [SerializeField] private float maxAngularVelocity = 720f;
+    public float maxAngularSpeed = 720f;
     [Range(0f, 100f)]
-    [SerializeField] private float maxSpeed = 10f;
+    public float maxSpeed = 10f;
 
-    private Rigidbody2D body;
+    new private Rigidbody2D rigidbody;
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
         else
         {
             Destroy(gameObject);
         }
 
-        body = GetComponent<Rigidbody2D>();
+        rigidbody = GetComponent<Rigidbody2D>();
     }
 
     private void FixedUpdate()
@@ -36,26 +36,19 @@ public class BallController : MonoBehaviour
             return;
 
         // roll the ball
-        body.AddTorque(-angularAcceleration * body.inertia);
+        rigidbody.AddTorque(-angularAcceleration * rigidbody.inertia);
         
         // clamp the ball's rolling speed
-        if (body.angularVelocity > maxAngularVelocity)
-        {
-            body.angularVelocity = maxAngularVelocity;
-        }
-        else if (body.angularVelocity < -maxAngularVelocity)
-        {
-            body.angularVelocity = -maxAngularVelocity;
-        }
+        rigidbody.angularVelocity = Mathf.Clamp(rigidbody.angularVelocity, -maxAngularSpeed, maxAngularSpeed);
 
         // clamp the ball's speed
-        if (body.velocity.magnitude > maxSpeed)
+        if (rigidbody.velocity.magnitude > maxSpeed)
         {
-            body.velocity = body.velocity.normalized * maxSpeed;
+            rigidbody.velocity = rigidbody.velocity.normalized * maxSpeed;
         }
-        else if (body.velocity.magnitude < -maxSpeed)
+        else if (rigidbody.velocity.magnitude < -maxSpeed)
         {
-            body.velocity = body.velocity.normalized * -maxSpeed;
+            rigidbody.velocity = rigidbody.velocity.normalized * -maxSpeed;
         }
     }
 
