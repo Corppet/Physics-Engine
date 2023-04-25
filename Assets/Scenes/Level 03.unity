@@ -5119,6 +5119,7 @@ GameObject:
   - component: {fileID: 1895812162}
   - component: {fileID: 1895812161}
   - component: {fileID: 1895812160}
+  - component: {fileID: 1895812163}
   m_Layer: 0
   m_Name: Gravity Adjuster
   m_TagString: Untagged
@@ -5221,6 +5222,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1895812163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895812159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47ac2a4152a10334789868dab3427090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newGravityScale: 9.81
 --- !u!1001 &1930164675
 PrefabInstance:
   m_ObjectHideFlags: 0
