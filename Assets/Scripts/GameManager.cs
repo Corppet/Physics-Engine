@@ -10,6 +10,12 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public bool isInPlay;
 
+    [Header("Gravity Settings")]
+    [Range(0f, 720f)]
+    [SerializeField] private float arrowRotationSpeed = 180f;
+
+    [Space(5)]
+
     [Header("Keybinds")]
     [SerializeField] private KeyCode menuKey = KeyCode.Escape;
     [SerializeField] private KeyCode restartKey = KeyCode.R;
@@ -22,12 +28,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform gravityArrowTransform;
 
     private float gravityRotationOffset;
+    private Vector3 gravityRotation;
 
     public void SetGravity(Vector2 gravity)
     {
         // change direction of gravity arrow
         float angle = Mathf.Atan2(gravity.y, gravity.x) * Mathf.Rad2Deg;
-        gravityArrowTransform.eulerAngles = (angle + gravityRotationOffset + 90f) * Vector3.forward;
+        gravityRotation = (angle + gravityRotationOffset + 90f) * Vector3.forward;
 
         // change direction of gravity
         Physics2D.gravity = gravity;
@@ -69,6 +76,7 @@ public class GameManager : MonoBehaviour
         }
 
         gravityRotationOffset = gravityArrowTransform.eulerAngles.z;
+        gravityRotation = gravityArrowTransform.eulerAngles;
     }
 
     private void Start()
@@ -87,6 +95,13 @@ public class GameManager : MonoBehaviour
         else if (Input.GetKeyDown(restartKey))
         {
             Restart();
+        }
+
+        Debug.Log(gravityRotation);
+        if (Vector3.Angle(gravityArrowTransform.eulerAngles, gravityRotation) > 0.1f)
+        {
+            gravityArrowTransform.eulerAngles = Vector3.Lerp(gravityArrowTransform.eulerAngles, gravityRotation, 
+                arrowRotationSpeed * Time.deltaTime);
         }
     }
 }

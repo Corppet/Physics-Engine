@@ -12,8 +12,9 @@ public class GravityAdjuster : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            Vector2 direction = transform.right * newGravityScale;
+            Vector2 direction = newGravityScale * transform.up;
             GameManager.Instance.SetGravity(direction);
+            Destroy(gameObject);
         }
     }
 }
