@@ -7,13 +7,14 @@ public class GravityAdjuster : MonoBehaviour
 {
     [Tooltip("The new gravity scale to apply to the player when they enter this trigger.")]
     [SerializeField] private float newGravityScale = 9.81f;
+    [SerializeField] private Direction cameraDirection = Direction.Right;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
             Vector2 direction = newGravityScale * transform.up;
-            GameManager.Instance.SetGravity(direction);
+            GameManager.Instance.SetGravity(direction, cameraDirection);
             Destroy(gameObject);
         }
     }

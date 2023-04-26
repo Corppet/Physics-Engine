@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Cinemachine;
+
+public enum Direction
+{
+    Left,
+    Right,
+    Up,
+    Down
+}
 
 public class GameManager : MonoBehaviour
 {
@@ -25,19 +34,26 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TMP_Text gameOverText;
-    [SerializeField] private Transform gravityArrowTransform;
+    [SerializeField] private Transform gravityTransform;
+    [SerializeField] private CinemachineVirtualCamera[] cameras;
 
     private float gravityRotationOffset;
-    private Vector3 gravityRotation;
 
-    public void SetGravity(Vector2 gravity)
+    public void SetGravity(Vector2 gravity, Direction direction)
     {
         // change direction of gravity arrow
         float angle = Mathf.Atan2(gravity.y, gravity.x) * Mathf.Rad2Deg;
-        gravityRotation = (angle + gravityRotationOffset + 90f) * Vector3.forward;
+        gravityTransform.eulerAngles = (angle + gravityRotationOffset + 90f) * Vector3.forward;
 
         // change direction of gravity
         Physics2D.gravity = gravity;
+
+        // change camera
+        foreach (var cam in cameras)
+        {
+            cam.gameObject.SetActive(false);
+        }
+        cameras[(int)direction].gameObject.SetActive(true);
     }
 
     public void ReturnToMenu()
@@ -75,8 +91,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        gravityRotationOffset = gravityArrowTransform.eulerAngles.z;
-        gravityRotation = gravityArrowTransform.eulerAngles;
+        gravityRotationOffset = gravityTransform.eulerAngles.z;
     }
 
     private void Start()
@@ -84,6 +99,7 @@ public class GameManager : MonoBehaviour
         gameOverPanel.SetActive(false);
 
         isInPlay = true;
+        Physics2D.gravity = 9.81f * Vector2.down;
     }
 
     private void Update()
@@ -95,13 +111,6 @@ public class GameManager : MonoBehaviour
         else if (Input.GetKeyDown(restartKey))
         {
             Restart();
-        }
-
-        Debug.Log(gravityRotation);
-        if (Vector3.Angle(gravityArrowTransform.eulerAngles, gravityRotation) > 0.1f)
-        {
-            gravityArrowTransform.eulerAngles = Vector3.Lerp(gravityArrowTransform.eulerAngles, gravityRotation, 
-                arrowRotationSpeed * Time.deltaTime);
         }
     }
 }
