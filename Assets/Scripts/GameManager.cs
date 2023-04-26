@@ -91,7 +91,10 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        gravityRotationOffset = gravityTransform.eulerAngles.z;
+        if (gravityTransform != null)
+        {
+            gravityRotationOffset = gravityTransform.eulerAngles.z;
+        }
     }
 
     private void Start()

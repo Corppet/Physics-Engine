@@ -180,7 +180,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 5, y: 2}
+  m_Size: {x: 6, y: 2}
   m_EdgeRadius: 0
 --- !u!212 &91534511
 SpriteRenderer:
@@ -1721,7 +1721,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   angularAcceleration: 10
-  maxAngularVelocity: 720
+  maxAngularSpeed: 720
   maxSpeed: 10
 --- !u!1 &1000034385
 GameObject:
@@ -2002,7 +2002,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 5, y: 2}
+  m_Size: {x: 6, y: 2}
   m_EdgeRadius: 0
 --- !u!212 &1058466243
 SpriteRenderer:
@@ -3438,7 +3438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6477675d2125f0d4cb200dbe3f81c6ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedRB: {fileID: 0}
+  selectedPlatform: {fileID: 0}
   maxForce: 10
   maxSpeed: 75
 --- !u!114 &1764938002
@@ -3454,10 +3454,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInPlay: 0
+  arrowRotationSpeed: 180
   menuKey: 27
   restartKey: 114
   gameOverPanel: {fileID: 532893276}
   gameOverText: {fileID: 271235875}
+  gravityTransform: {fileID: 0}
+  cameras: []
 --- !u!4 &1769309848 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6593365464593514865, guid: f8e48d9481b411e4d989d2f7ce758693, type: 3}
